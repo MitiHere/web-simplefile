@@ -1,0 +1,16 @@
+{
+  "name": "web-simplefile",
+  "version": "1.0.0",
+  "description": "a simple single file or multiple file sharing for personal use",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "miti",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.1",
+    "nodemon": "^3.0.1"
+  }
+}
