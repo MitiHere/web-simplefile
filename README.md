@@ -2,7 +2,7 @@
 
 A weird try on file hosting service, with a simple site where you can share a file, and download it with a qr code to your phone, right now it is really not secure, because anyone can change the file how they want but anyone can also download the file.
 
-You can see the service here : https://always.ceyraud.com/
+You can see the service here : https://fupload.ceyraud.com/
 
 ## Todo
 
