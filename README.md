@@ -6,6 +6,8 @@ You can see the service here : https://always.ceyraud.com/
 
 ## Todo
 
+- Fix issue on the validation of the token.
+
 - link to a MAPI to protect the upload behind a logged page
 - create a random uid for the current file, and you can only download it if you have the uuid for this file
 - create a timer for how long the file is accessible
