@@ -1,4 +1,5 @@
 const uploadButton = document.getElementById("uploadButton");
+const logoutButton = document.getElementById("logoutButton");
 const fileinput = document.getElementById("fileinput");
 const currFile = document.getElementById("currFile");
 const img = document.getElementById("img");
@@ -20,6 +21,30 @@ uploadButton.addEventListener("click", () => {
     .catch((error) => {
       console.error(error);
       currFile.textContent = "Error uploading file. " + error;
+    });
+});
+
+logoutButton.addEventListener("click", () => {
+  fetch("/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Include credentials (cookies) in the request
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.Response !== "Ok") {
+        console.log("error");
+        console.log(data);
+        errorDiv.textContent = "Error :" + data.data.message;
+      } else {
+        window.location.assign("/");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      errorDiv.textContent = "Error : " + error;
     });
 });
 

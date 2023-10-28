@@ -47,6 +47,7 @@ app.get("/upload", async (req, res) => {
 
 app.get("/", async (req, res) => {
   const mapiToken = req.cookies.mapiTok;
+  console.log(mapiToken);
   if (await checkValidity(mapiToken)) {
     res.redirect("/upload");
   } else {
@@ -55,14 +56,20 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/login", async (req, res) => {
-  res.sendFile(__dirname + "/scripts/login.html");
+  const mapiToken = req.cookies.mapiTok;
+  if (await checkValidity(mapiToken)) {
+    res.redirect("/upload");
+  } else {
+    res.sendFile(__dirname + "/scripts/login.html");
+  }
 });
+
 app.get("/login.js", async (req, res) => {
   res.sendFile(__dirname + "/scripts/login.js");
 });
 app.get("/getFileInfo", async (req, res) => {
   const mapiToken = req.cookies.mapiTok;
-  if (checkValidity(mapiToken)) {
+  if (await checkValidity(mapiToken)) {
     res.json(currentFile);
   } else {
     res.redirect("/login");
@@ -79,6 +86,7 @@ app.get("/getCurrentFile", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const mapiToken = req.cookies.mapiTok;
+  console.log(mapiToken);
   const { login, password } = req.body;
   if (mapiToken) {
     const response = await axios.post(MAPIURL + "/validate", {
@@ -90,7 +98,6 @@ app.post("/login", async (req, res) => {
         data: { message: "Logged In" },
       });
     } else {
-      showObj(response.data);
       if (response.data.data.type === "Invalid Token") {
         res.cookie("mapiTok", "", deleteCookie);
       }
@@ -106,7 +113,7 @@ app.post("/login", async (req, res) => {
     });
 
     if (response.data.Response === "Ok") {
-      res.cookie("mapiTok", response.data.token, cookieSett);
+      res.cookie("mapiTok", response.data.data.token, cookieSett);
       res.status(200).json({
         Response: "Ok",
         data: { message: "Logged In" },
@@ -115,6 +122,27 @@ app.post("/login", async (req, res) => {
       res.status(500).json({
         Response: "Api Error",
         data: { message: response.data.data.type },
+      });
+    }
+  }
+});
+
+app.post("/logout", async (req, res) => {
+  const mapiToken = req.cookies.mapiTok;
+  if (mapiToken) {
+    const response = await axios.post(MAPIURL + "/logout", {
+      token: mapiToken,
+    });
+    if (response.data.Response === "Ok") {
+      res.cookie("mapiTok", "", deleteCookie);
+      res.status(200).json({
+        Response: "Ok",
+        data: { message: "Logged Out" },
+      });
+    } else {
+      res.status(500).json({
+        Response: "Api Error",
+        data: { message: "error" },
       });
     }
   }
@@ -151,11 +179,7 @@ async function checkValidity(mapiToken) {
     const response = await axios.post(MAPIURL + "/validate", {
       token: mapiToken,
     });
-    if (response.Response === "Ok") {
-      return true;
-    } else {
-      return false;
-    }
+    return response.data.Response === "Ok";
   } else {
     return false;
   }
