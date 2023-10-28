@@ -39,7 +39,7 @@ logoutButton.addEventListener("click", () => {
         console.log(data);
         errorDiv.textContent = "Error :" + data.data.message;
       } else {
-        window.location.assign("/");
+        window.location.reload();
       }
     })
     .catch((error) => {

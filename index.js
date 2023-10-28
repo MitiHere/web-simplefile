@@ -47,7 +47,6 @@ app.get("/upload", async (req, res) => {
 
 app.get("/", async (req, res) => {
   const mapiToken = req.cookies.mapiTok;
-  console.log(mapiToken);
   if (await checkValidity(mapiToken)) {
     res.redirect("/upload");
   } else {
@@ -86,7 +85,6 @@ app.get("/getCurrentFile", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const mapiToken = req.cookies.mapiTok;
-  console.log(mapiToken);
   const { login, password } = req.body;
   if (mapiToken) {
     const response = await axios.post(MAPIURL + "/validate", {
